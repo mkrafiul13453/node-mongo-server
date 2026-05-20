@@ -50,12 +50,16 @@ async function server() {
         // await client.db("admin").command({ ping: 1 });
         const db = client.db("e-commerce");
         const productCollection = db.collection("products");
+
+ // ******************** Read Operation is here :
         app.get("/products", async (req, res) => {
             const cursor = productCollection.find();
             const result = await cursor.toArray();
             res.send(result);
         })
 
+
+// ******************** Read by ID Operation is here :
         app.get("/products/:productId", async (req, res) => {
             const productId = req.params.productId;
             const query = { _id: new ObjectId(productId) };
@@ -63,12 +67,18 @@ async function server() {
             const result = await productCollection.findOne(query);
             res.send(result);
         })
+
+
+// ******************** Create Operation is here :
         app.post("/products", async (req, res) => {
             const newProduct = req.body;
             const result = await productCollection.insertOne(newProduct);
             res.send(result);
         });
 
+
+
+// ******************** Update Operation is here :
         app.patch("/products/:productId", async (req, res) => {
             const { productId } = req.params;
             const updateData = req.body;
@@ -83,6 +93,8 @@ async function server() {
         });
 
 
+
+// ******************** Delete Operation is here :
         app.delete("/products/:productId", async (req, res) => {
             const productId = req.params.productId;
             const query = { _id: new ObjectId(productId) };
@@ -98,7 +110,7 @@ async function server() {
 }
 server().catch(console.dir);
 
-
+// Sever home page is here:
 app.get('/', (req, res) => {
     res.send('Basic server is created for the project .')
 })
